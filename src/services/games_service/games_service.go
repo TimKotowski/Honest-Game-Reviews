@@ -22,3 +22,10 @@ func (s *gamesService) GetGame(gameID int64) (*games.Game, *errors.RestErrors) {
 func (s *gamesService) GetAllGames() (games.Games, *errors.RestErrors) {
 	return games.GetAllGames()
 }
+
+func (s *gamesService) QueryGame(publishers []string) (games.Games, *errors.RestErrors) {
+	// if publisher == "all" {
+	// 	return games.GetAllGames()
+	// }
+	return games.QueryGames(publishers)
+}

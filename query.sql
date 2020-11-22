@@ -2,6 +2,8 @@
 
 -- READY TO USE
 
+
+
 	-- INSERT INTO games (id, title, released, image, company, rating, metacritic, platforms, genres) VALUES (1, "World Of Warcraft", "2004-11-23", "https://static-cdn.jtvnw.net/ttv-boxart/World%20of%20Warcraft-285x380.jpg", "Blizzard Entertainment", 3.7, 93, "pc", "mmorpg");
 
 	-- INSERT INTO games (id, title, released, image, company, rating, metacritic, platforms, genres) VALUES (2, "Escape From Tarkov", "2017-07-27", "https://static-cdn.jtvnw.net/ttv-boxart/Escape%20From%20Tarkov-285x380.jpg", "Battlestate Games", 3.4, 94, "pc", "survival");

@@ -5,11 +5,13 @@ import (
 	"Honest-Game-Reviews/src/logger"
 	"Honest-Game-Reviews/src/utils/errors"
 	"fmt"
+	"strings"
 )
 
 const (
 	queryGetGame     = "SELECT id, title, released, image, company, rating, metacritic, platforms, genres FROM games WHERE id=?;"
 	queryGetAllGames = "SELECT id, title, released, image, company, rating, metacritic, platforms, genres FROM games;"
+	// queryGameByCompany = "SELECT * FROM games WHERE company IN (?" + strings.Repeat(",?", len(args)-1) + "))"
 )
 
 func (games *Game) GetGame() *errors.RestErrors {
@@ -58,4 +60,38 @@ func GetAllGames() ([]Game, *errors.RestErrors) {
 		return nil, errors.NewNotFoundError(fmt.Sprintf("there were no games in the database %v", listOfGames))
 	}
 	return listOfGames, nil
+}
+
+func QueryGames(publishers []string) ([]Game,  *errors.RestErrors ) {
+ var args []interface{}
+	for _, publisher := range publishers {
+		args = append(args, publisher)
+		// fmt.Println(len(args)-1)
+	}
+
+	sql := "SELECT * FROM games WHERE company IN (?" + strings.Repeat(",?", len(args)-1) + ")"
+	fmt.Println("Query : ", sql)
+	stmt, err := database.Client.Prepare(sql)
+		if err != nil {
+		logger.Error("error when trying to prepare get user statment", err)
+		return nil, errors.NewInternalServerError("database error")
+	}
+	rows, err := stmt.Query(args...)
+	defer stmt.Close()
+
+	if err != nil {
+		logger.Error("error wen getting rows from stmt", err)
+		return nil, errors.NewInternalServerError("database error")
+	}
+	defer rows.Close()
+	queryListOfGames := []Game{}
+	for rows.Next(){
+		var game Game
+		if err := rows.Scan(&game.ID, &game.Title, &game.Released, &game.Image, &game.Company, &game.Rating, &game.Metacritic, &game.Platforms, &game.Genres); err != nil {
+			logger.Error("error when scanning rows", err)
+			return nil, errors.NewInternalServerError("database error")
+		}
+		queryListOfGames = append(queryListOfGames, game)
+	}
+	return queryListOfGames, nil
 }
