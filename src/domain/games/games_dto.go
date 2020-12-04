@@ -8,7 +8,7 @@ type Game struct {
 	Released   string         `json:"released"`
 	Image      string         `json:"game_image"`
 	Company    string         `json:"company"`
-	Rating     float64         `json:"rating"`
+	Rating     float64        `json:"rating"`
 	Metacritic int            `json:"metacritic"`
 	Platforms  sql.NullString `json:"platforms"`
 	Genres     sql.NullString `json:"genres"`

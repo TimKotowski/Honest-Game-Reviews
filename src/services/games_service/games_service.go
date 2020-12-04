@@ -3,6 +3,8 @@ package games_service
 import (
 	"Honest-Game-Reviews/src/domain/games"
 	"Honest-Game-Reviews/src/utils/errors"
+	"fmt"
+	"strings"
 )
 
 var (
@@ -23,9 +25,31 @@ func (s *gamesService) GetAllGames() (games.Games, *errors.RestErrors) {
 	return games.GetAllGames()
 }
 
-func (s *gamesService) QueryGame(publishers []string) (games.Games, *errors.RestErrors) {
-	// if publisher == "all" {
-	// 	return games.GetAllGames()
-	// }
-	return games.QueryGames(publishers)
+func (s *gamesService) QueryGamesByCompany(publishers []string) (games.Games, *errors.RestErrors) {
+	for _, publisher := range publishers {
+		if strings.Contains(publisher, "Reset List") {
+			return games.GetAllGames()
+		}
+	}
+	return games.QueryGamesByCompany(publishers)
+}
+
+
+func (s *gamesService) QueryGamesByPlatform(platforms []string) (games.Games, *errors.RestErrors) {
+	for _, platform := range platforms {
+		if strings.Contains(platform, "Reset List") {
+			fmt.Println("hitting")
+			return games.GetAllGames()
+		}
+	}
+	return games.QueryGamesByPlatform(platforms)
+}
+
+func (s *gamesService) QueryGamesByMetacriticScore(metacriticScore []string) (games.Games, *errors.RestErrors)  {
+	for _, score := range metacriticScore {
+		if strings.Contains(score,"Reset List") {
+			return games.GetAllGames()
+		}
+	}
+	return games.QueryGamesByMetacriticScore(metacriticScore)
 }

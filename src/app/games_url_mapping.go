@@ -7,7 +7,10 @@ import (
 )
 
 func gamesURLMapping(router *chi.Mux) {
-	router.Get("/games", games_handler.GamesHandler.GetAllGames)
-	router.Get("/games/{game_id}", games_handler.GamesHandler.GetGame)
-	router.Get("/games/company", games_handler.GamesHandler.QueryGamesByCompany)
+	// GET methods for games
+	router.Get("/api/v1/games", games_handler.GamesHandler.GetAllGames)
+	router.Get("/api/v1/games/{game_id}", games_handler.GamesHandler.GetGame)
+	router.Get("/api/v1/games/company", games_handler.GamesHandler.QueryGamesByCompany)
+	router.Get("/api/v1/games/platforms", games_handler.GamesHandler.QueryGameByPlatforms)
+	router.Get("/api/v1/games/metacriticScore", games_handler.GamesHandler.QueryGameByMetacriticScore)
 }

@@ -28,7 +28,7 @@
 
 	-- INSERT INTO games (id, title, released, image, company, rating, metacritic, platforms, genres) VALUES (12, "Demon's Souls", "2020-11-12", "https://static-cdn.jtvnw.net/ttv-boxart/Demon%27s%20Souls-285x380.jpg", "Sony Interactive Entertainment", 4.2, 89, "pc", "action");
 
-	-- INSERT INTO games (id, title, released, image, company, rating, metacritic, platforms, genres) VALUES (13, "Valorent", "2020-06-02", "https://www.csitquestions.com/wp-content/uploads/2020/07/World-of-Warcraft-Shadowlands-Release-Date-01-Header.jpg", "Riot Games", 4.0, 80, "pc", "first-person-shooter");
+	-- INSERT INTO games (id, title, released, image, company, rating, metacritic, platforms, genres) VALUES (13, "Valorent", "2020-06-02", "https://static-cdn.jtvnw.net/ttv-boxart/VALORANT-285x380.jpg", "Riot Games", 4.0, 80, "pc", "first-person-shooter");
 
 	-- INSERT INTO games (id, title, released, image, company, rating, metacritic, platforms, genres) VALUES (14, "FIFA 21", "2020-10-06", "https://static-cdn.jtvnw.net/ttv-boxart/FIFA%2021-285x380.jpg", "Electronic Arts", 3.7, 93, "pc", "mmorpg");
 
