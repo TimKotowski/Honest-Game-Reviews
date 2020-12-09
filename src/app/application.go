@@ -18,7 +18,7 @@ var (
 func StartApplication() {
 	flag.StringVar(&listenAddr, "listen-addr", ":8080", "server listen address")
 
-	database.NewDatabase()
+	database.DatabaseClient.NewDatabase()
 
 	router := chi.NewRouter()
 	gamesURLMapping(router)

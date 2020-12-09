@@ -8,9 +8,9 @@ import (
 )
 
 func TestGamesService(t *testing.T) {
-	database.NewDatabase()
+	database.DatabaseClient.NewDatabase()
 	var gamedID int64 = 1
-	game, err := GameService.GetGame(gamedID)
+	game, err := NewGameService().GetGame(gamedID)
 	if err != nil {
 		if err.Status != http.StatusOK {
 			t.Errorf("Expected nil, received %d", err.Status)
@@ -20,8 +20,8 @@ func TestGamesService(t *testing.T) {
 }
 
 func TestAllGamesService(t *testing.T) {
-	database.NewDatabase()
-	games, err := GameService.GetAllGames()
+	database.DatabaseClient.NewDatabase()
+	games, err := NewGameService().GetAllGames()
 	if err != nil {
 		if err.Status != http.StatusOK {
 			t.Errorf("Expected nil, received %d", err.Status)
@@ -31,10 +31,10 @@ func TestAllGamesService(t *testing.T) {
 }
 
 func TestQueryGamesByCompany(t *testing.T) {
-	database.NewDatabase()
+	database.DatabaseClient.NewDatabase()
 	query := []string{"blizzard", "epic games", "sega"}
 
-	games, err := GameService.QueryGamesByCompany(query)
+	games, err :=  NewGameService().QueryGamesByPlatform(query)
 	if err != nil {
 		if err.Status != http.StatusOK {
 			t.Errorf("expected nil, recived %d", err.Status)
@@ -44,11 +44,11 @@ func TestQueryGamesByCompany(t *testing.T) {
 
 }
 
-func TestQueryGamesByPLatform(t *testing.T) {
-	database.NewDatabase()
+func TestQueryGamesByPatform(t *testing.T) {
+	database.DatabaseClient.NewDatabase()
 	query := []string{"xbox-360"}
 
-	games, err := GameService.QueryGamesByPlatform(query)
+	games, err := NewGameService().QueryGamesByPlatform(query)
 	if err != nil {
 		if err.Status != http.StatusOK {
 			t.Errorf("expected nil, recived %d", err.Status)
