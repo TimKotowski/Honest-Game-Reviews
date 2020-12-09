@@ -7,11 +7,22 @@ import (
 	"strings"
 )
 
-var (
-	GameService *gamesService = &gamesService{}
-)
+
+type GameServiceInterface interface {
+	GetGame(int64) (*games.Game, *errors.RestErrors)
+	GetAllGames() (games.Games, *errors.RestErrors)
+	QueryGamesByCompany([]string) (games.Games, *errors.RestErrors)
+	QueryGamesByPlatform([]string) (games.Games, *errors.RestErrors)
+	QueryGamesByMetacriticScore([]string) (games.Games, *errors.RestErrors)
+}
 
 type gamesService struct{}
+
+// call to get a new instande of NewGameService to hiding implementation for the rest of the world
+func NewGameService() GameServiceInterface {
+	return &gamesService{}
+}
+
 
 func (s *gamesService) GetGame(gameID int64) (*games.Game, *errors.RestErrors) {
 	game := &games.Game{ID: gameID}

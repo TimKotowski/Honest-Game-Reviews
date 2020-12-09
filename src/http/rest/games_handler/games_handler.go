@@ -11,11 +11,19 @@ import (
 	"github.com/go-chi/chi"
 )
 
-var (
-	GamesHandler *gamesHandler = &gamesHandler{}
-)
+type GamesHandler interface {
+	GetGame(w http.ResponseWriter, r *http.Request)
+	GetAllGames(w http.ResponseWriter, r *http.Request)
+	QueryGamesByCompany(w http.ResponseWriter, r *http.Request)
+	QueryGameByPlatforms(w http.ResponseWriter, r *http.Request)
+	QueryGameByMetacriticScore(w http.ResponseWriter, r *http.Request)
+}
 
 type gamesHandler struct{}
+
+func NewGamesHandler() GamesHandler {
+	return &gamesHandler{}
+}
 
 func (handler *gamesHandler) GetGame(w http.ResponseWriter, r *http.Request) {
 	gameID, err := strconv.ParseInt(chi.URLParam(r, "game_id"), 10, 64)
@@ -24,7 +32,7 @@ func (handler *gamesHandler) GetGame(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	game, gameErr := games_service.GameService.GetGame(gameID)
+	game, gameErr := games_service.NewGameService().GetGame(gameID)
 	if gameErr != nil {
 		json_utils.JsonErrorResponse(w, gameErr)
 		return
@@ -33,7 +41,7 @@ func (handler *gamesHandler) GetGame(w http.ResponseWriter, r *http.Request) {
 }
 
 func (handler *gamesHandler) GetAllGames(w http.ResponseWriter, r *http.Request) {
-	games, gamesErr := games_service.GameService.GetAllGames()
+	games, gamesErr := games_service.NewGameService().GetAllGames()
 	if gamesErr != nil {
 		json_utils.JsonErrorResponse(w, gamesErr)
 		return
@@ -43,7 +51,6 @@ func (handler *gamesHandler) GetAllGames(w http.ResponseWriter, r *http.Request)
 
 func (handler *gamesHandler) QueryGamesByCompany(w http.ResponseWriter, r *http.Request) {
 	//Extract the value of the publisher parameter from the query string
-
 	queryParams, err := url.ParseQuery(r.URL.RawQuery)
 	if err != nil {
 		json_utils.ClientErrorResponse(w, http.StatusBadRequest, "error when parsing query, may not be set", err)
@@ -54,7 +61,7 @@ func (handler *gamesHandler) QueryGamesByCompany(w http.ResponseWriter, r *http.
 		json_utils.ClientErrorResponse(w, http.StatusBadRequest, "no value to get out of publisher query", err)
 		return
 	}
-	queriedGame, gameErr := games_service.GameService.QueryGamesByCompany(publishers)
+	queriedGame, gameErr := games_service.NewGameService().QueryGamesByCompany(publishers)
 	if gameErr != nil {
 		json_utils.JsonErrorResponse(w, gameErr)
 		return
@@ -76,7 +83,7 @@ func (handler *gamesHandler) QueryGameByPlatforms(w http.ResponseWriter, r *http
 		return
 	}
 
-	queriedPlatforms, platformErr := games_service.GameService.QueryGamesByPlatform(platforms)
+	queriedPlatforms, platformErr := games_service.NewGameService().QueryGamesByPlatform(platforms)
 	if platformErr != nil {
 		json_utils.JsonErrorResponse(w, platformErr)
 		return
@@ -95,7 +102,7 @@ func (handler *gamesHandler) QueryGameByMetacriticScore(w http.ResponseWriter, r
 		json_utils.ClientErrorResponse(w, http.StatusBadRequest, "no values given", err)
 		return
 	}
-	metacrticScore, metaErr := games_service.GameService.QueryGamesByMetacriticScore(queriedMetacrticScore)
+	metacrticScore, metaErr := games_service.NewGameService().QueryGamesByMetacriticScore(queriedMetacrticScore)
 	if metaErr != nil {
 		json_utils.JsonErrorResponse(w, metaErr)
 		return

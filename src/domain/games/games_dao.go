@@ -14,7 +14,8 @@ const (
 )
 
 func (games *Game) GetGame() *errors.RestErrors {
-	stmt, err := database.Client.Prepare(queryGetGame)
+
+	stmt, err := database.DatabaseClient.Client.Prepare(queryGetGame)
 	if err != nil {
 		logger.Error("error when trying to prepare get user statment", err)
 		return errors.NewInternalServerError("database error")
@@ -30,7 +31,7 @@ func (games *Game) GetGame() *errors.RestErrors {
 }
 
 func GetAllGames() ([]Game, *errors.RestErrors) {
-	stmt, err := database.Client.Prepare(queryGetAllGames)
+	stmt, err := database.DatabaseClient.Client.Prepare(queryGetAllGames)
 	if err != nil {
 		logger.Error("error when trying to prepare get user statment", err)
 		return nil, errors.NewInternalServerError("database error")
@@ -68,7 +69,7 @@ func QueryGamesByCompany(publishers []string) ([]Game, *errors.RestErrors) {
 	}
 	sql := "SELECT * FROM games WHERE company IN (?" + strings.Repeat(",?", len(args)-1) + ")"
 	// fmt.Println("Query : ", sql)
-	stmt, err := database.Client.Prepare(sql)
+	stmt, err := database.DatabaseClient.Client.Prepare(sql)
 	if err != nil {
 		logger.Error("error when trying to prepare get user statment", err)
 		return nil, errors.NewInternalServerError("database error")
@@ -105,7 +106,7 @@ func QueryGamesByPlatform(platforms []string) ([]Game, *errors.RestErrors) {
 		args = append(args, platform)
 	}
 	sql := "SELECT * FROM games WHERE platforms IN (?" + strings.Repeat(",?", len(args)-1) + ")"
-	stmt, err := database.Client.Prepare(sql)
+	stmt, err := database.DatabaseClient.Client.Prepare(sql)
 	if err != nil {
 		logger.Error("error when trying to prepare get user statment", err)
 		return nil, errors.NewInternalServerError("database error")
@@ -141,7 +142,7 @@ func QueryGamesByMetacriticScore(metacriticScore []string) ([]Game, *errors.Rest
 		args = append(args, metaScore)
 	}
 	sql := 	"SELECT * FROM games WHERE metacritic IN (?" + strings.Repeat(",?", len(args)-1) + ")"
-	stmt, err := database.Client.Prepare(sql)
+	stmt, err := database.DatabaseClient.Client.Prepare(sql)
 
 	if err != nil {
 		logger.Error("error when trying to prepare get user statment", err)
