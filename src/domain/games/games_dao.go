@@ -14,7 +14,6 @@ const (
 )
 
 func (games *Game) GetGame() *errors.RestErrors {
-
 	stmt, err := database.DatabaseClient.Client.Prepare(queryGetGame)
 	if err != nil {
 		logger.Error("error when trying to prepare get user statment", err)
@@ -68,7 +67,7 @@ func QueryGamesByCompany(publishers []string) ([]Game, *errors.RestErrors) {
 		args = append(args, publisher)
 	}
 	sql := "SELECT * FROM games WHERE company IN (?" + strings.Repeat(",?", len(args)-1) + ")"
-	// fmt.Println("Query : ", sql)
+
 	stmt, err := database.DatabaseClient.Client.Prepare(sql)
 	if err != nil {
 		logger.Error("error when trying to prepare get user statment", err)
@@ -137,7 +136,6 @@ func QueryGamesByPlatform(platforms []string) ([]Game, *errors.RestErrors) {
 
 func QueryGamesByMetacriticScore(metacriticScore []string) ([]Game, *errors.RestErrors) {
 	var args []interface{}
-
 	for _, metaScore := range metacriticScore {
 		args = append(args, metaScore)
 	}
