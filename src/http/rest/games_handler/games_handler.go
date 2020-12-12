@@ -3,7 +3,6 @@ package games_handler
 import (
 	"Honest-Game-Reviews/src/services/games_service"
 	"Honest-Game-Reviews/src/utils/json_utils"
-	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -107,6 +106,5 @@ func (handler *gamesHandler) QueryGameByMetacriticScore(w http.ResponseWriter, r
 		json_utils.JsonErrorResponse(w, metaErr)
 		return
 	}
-	fmt.Println(metacrticScore)
 	json_utils.JsonResponse(w, http.StatusOK, metacrticScore)
 }
