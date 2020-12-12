@@ -5,6 +5,7 @@ import (
 	"Honest-Game-Reviews/src/services/users_service"
 	"Honest-Game-Reviews/src/utils/json_utils"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -33,5 +34,6 @@ func (handler *usersHandler) CreateUser(w http.ResponseWriter, r *http.Request) 
 		json_utils.JsonErrorResponse(w, userErr)
 		return
 	}
+	fmt.Println(createdUser)
 	json_utils.JsonResponse(w, http.StatusOK, createdUser)
 }

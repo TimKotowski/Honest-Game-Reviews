@@ -6,9 +6,8 @@ import (
 	"Honest-Game-Reviews/src/utils/errors"
 )
 
-
 var (
-	queryCreateUser = "INSERT INTO users (user_name, email, password, date_created, isAdmin, status) VALUES (?, ?, ?, ?, ?, ?)";
+	queryCreateUser = "INSERT INTO users (user_name, email, password, date_created, isAdmin, status) VALUES (?, ?, ?, ?, ?, ?)"
 )
 
 func (user *User) SaveUser() *errors.RestErrors {
