@@ -39,3 +39,4 @@ func TestQueryGamesByCompany(t *testing.T) {
 	}
 
 }
+

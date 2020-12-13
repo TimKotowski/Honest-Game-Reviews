@@ -10,23 +10,33 @@ import (
 
 var (
 	NewUsersService UsersServiceInterface = &usersService{}
-	statusActive = "active"
+	statusActive string = "active"
 )
 
 type UsersServiceInterface interface {
 	CreateUser(users.User) (*users.User, *errors.RestErrors)
+	GetUser(users.UserLoginRequest) (*users.User, *errors.RestErrors)
 }
 
 type usersService struct {}
 
-
-func (s *usersService) CreateUser(userBody users.User) (*users.User, *errors.RestErrors) {
-	// hash password
-	userBody.GetHash()
-	userBody.Status = statusActive
-	userBody.DateCreated = date_utils.GetNowDBFormat()
-	if err := userBody.SaveUser(); err != nil {
+func (s *usersService) CreateUser(user users.User) (*users.User, *errors.RestErrors) {
+	if err := user.Validate(); err != nil {
 		return nil, err
 	}
-	return &userBody, nil
+	// hash password
+	user.GetHash() // &userBody.GetHash() implicitly dose it
+	user.Status = statusActive
+	// set dateTime and format it right to be in mysql DB
+	user.DateCreated = date_utils.GetNowDBFormat()
+	if err := user.SaveUser(); err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+
+
+func (s *usersService) GetUser(UserLoginRequest users.UserLoginRequest) (*users.User, *errors.RestErrors) {
+	return UserLoginRequest.GetUser()
 }
