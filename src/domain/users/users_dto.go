@@ -24,7 +24,6 @@ type UserLoginRequest struct {
 	Password string `json:"password"`
 }
 
-type Users []User
 
 func (user *User) GetHash() error {
 	// GenerateFromPassword returns the bcrypt hash of the password at the given cost.

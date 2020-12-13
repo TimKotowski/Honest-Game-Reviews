@@ -25,8 +25,10 @@ func StartApplication() {
 	database.DatabaseClient.NewDatabase()
 
 	router := chi.NewRouter()
+	// routes
 	gamesURLMapping(router)
 	usersURLMapping(router)
+	usersAuthenticationsURLMapping(router)
 
 
 	server := http.Server{

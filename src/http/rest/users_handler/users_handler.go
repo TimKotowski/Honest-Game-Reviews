@@ -5,13 +5,13 @@ import (
 	"Honest-Game-Reviews/src/services/users_service"
 	"Honest-Game-Reviews/src/utils/json_utils"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
 
 type UsersHandler interface {
 	CreateUser(http.ResponseWriter, *http.Request)
+	GetUser(w http.ResponseWriter, r *http.Request)
 }
 
 type usersHandler struct {}
@@ -34,6 +34,23 @@ func (handler *usersHandler) CreateUser(w http.ResponseWriter, r *http.Request) 
 		json_utils.JsonErrorResponse(w, userErr)
 		return
 	}
-	fmt.Println(createdUser)
 	json_utils.JsonResponse(w, http.StatusOK, createdUser)
 }
+
+
+func (handler *usersHandler) GetUser(w http.ResponseWriter, r *http.Request) {
+	var user users.UserLoginRequest
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		json_utils.ClientErrorResponse(w, http.StatusBadRequest, "invalid json body", err)
+		return
+	}
+	// get that user by email service
+	foundUser, userErr := users_service.NewUsersService.GetUser(user)
+	if userErr != nil {
+		json_utils.JsonErrorResponse(w, userErr)
+		return
+	}
+	json_utils.JsonResponse(w, http.StatusOK, foundUser)
+
+}
+
