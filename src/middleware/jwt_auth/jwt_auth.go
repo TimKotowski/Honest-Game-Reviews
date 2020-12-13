@@ -37,7 +37,6 @@ func NewJWT(userPassword string, userID int64) (string, error) {
 	return signedToken, nil
 }
 
-
 // GetJWTSigningKey returns the JWT signing key.
 // It is constructed using the member's hashed password and the application
 // JWT secret.

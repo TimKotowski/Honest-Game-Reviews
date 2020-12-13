@@ -24,7 +24,6 @@ type UserLoginRequest struct {
 	Password string `json:"password"`
 }
 
-
 func (user *User) GetHash() error {
 	// GenerateFromPassword returns the bcrypt hash of the password at the given cost.
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
@@ -34,7 +33,6 @@ func (user *User) GetHash() error {
 	}
 	return nil
 }
-
 
 func (user *User) Validate() *errors.RestErrors {
 	// remove white space

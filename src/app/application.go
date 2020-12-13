@@ -18,7 +18,6 @@ var (
 	listenAddr string
 )
 
-
 func StartApplication() {
 	flag.StringVar(&listenAddr, "listen-addr", ":8080", "server listen address")
 
@@ -29,7 +28,6 @@ func StartApplication() {
 	gamesURLMapping(router)
 	usersURLMapping(router)
 	usersAuthenticationsURLMapping(router)
-
 
 	server := http.Server{
 		Addr:           listenAddr,
@@ -48,13 +46,12 @@ func StartApplication() {
 		<-quit
 		fmt.Println("server is shutting down...")
 
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second * 15)
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 		defer cancel()
-
 
 		server.SetKeepAlivesEnabled(false)
 		if err := server.Shutdown(ctx); err != nil {
-			log.Fatalf("could not gracefully shutdown server %v\n",  err)
+			log.Fatalf("could not gracefully shutdown server %v\n", err)
 		}
 
 		close(done)
@@ -68,4 +65,3 @@ func StartApplication() {
 	<-done
 	fmt.Println("server stopped")
 }
-

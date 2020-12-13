@@ -9,13 +9,11 @@ import (
 	"net/http"
 )
 
-
 type UsersAuthenticationsHandlerInterface interface {
 	UserLogin(w http.ResponseWriter, r *http.Request)
 }
 
-
-type usersAuthenticationsHandler struct {}
+type usersAuthenticationsHandler struct{}
 
 func NewusersAuthenticationsHandler() UsersAuthenticationsHandlerInterface {
 	return &usersAuthenticationsHandler{}
@@ -27,17 +25,19 @@ func (handler *usersAuthenticationsHandler) UserLogin(w http.ResponseWriter, r *
 		json_utils.ClientErrorResponse(w, http.StatusBadRequest, "invalid json body", err)
 		return
 	}
-	// get that specific user
+	// get that specific user once they login
 	specificUser, userErr := users_service.NewUsersService.GetUser(user)
 	if userErr != nil {
 		json_utils.JsonErrorResponse(w, userErr)
 		return
 	}
-	// onces i get that speicifi user return back the user info and assign a JWT To that user
+
+	// once we get more of the users info from the database assign a JET to that user
 	jwtString, jwtErr := jwt_auth.NewJWT(specificUser.Password, specificUser.ID)
 	if jwtErr != nil {
 		json_utils.ClientErrorResponse(w, http.StatusBadRequest, "invalid json body", jwtErr)
 		return
 	}
+	// return the JWT string back?
 	json_utils.JsonResponse(w, http.StatusOK, jwtString)
 }

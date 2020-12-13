@@ -8,7 +8,7 @@ import (
 
 var (
 	queryCreateUser = "INSERT INTO users (user_name, email, password, date_created, isAdmin, status) VALUES (?, ?, ?, ?, ?, ?)"
-	queryGetUser = "SELECT * FROM users WHERE email=?"
+	queryGetUser    = "SELECT * FROM users WHERE email=?"
 )
 
 func (user *User) SaveUser() *errors.RestErrors {
@@ -17,6 +17,7 @@ func (user *User) SaveUser() *errors.RestErrors {
 		logger.Error("error in preparing sql statment", err)
 		return errors.NewInternalServerError("database error")
 	}
+	defer stmt.Close()
 
 	result, err := stmt.Exec(user.Username, user.Email, user.Password, user.DateCreated, user.IsAdmin, user.Status)
 	if err != nil {
@@ -33,16 +34,16 @@ func (user *User) SaveUser() *errors.RestErrors {
 	return nil
 }
 
-
 func (UserLoginRequest *UserLoginRequest) GetUser() (*User, *errors.RestErrors) {
 	stmt, stmtErr := database.DatabaseClient.Client.Prepare(queryGetUser)
 	if stmtErr != nil {
 		logger.Error("error in preparing sql statment", stmtErr)
 		return nil, errors.NewInternalServerError("database error")
 	}
+	defer stmt.Close()
 
-	 row := stmt.QueryRow(UserLoginRequest.Email)
-	 var user User
+	row := stmt.QueryRow(UserLoginRequest.Email)
+	var user User
 	err := row.Scan(&user.ID, &user.Username, &user.Email, &user.Password, &user.DateCreated, &user.IsAdmin, &user.Status)
 	if err != nil {
 		logger.Error("error in query statment", err)

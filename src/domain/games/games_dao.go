@@ -66,15 +66,16 @@ func QueryGamesByCompany(publishers []string) ([]Game, *errors.RestErrors) {
 	for _, publisher := range publishers {
 		args = append(args, publisher)
 	}
-	sql := "SELECT * FROM games WHERE company IN (?" + strings.Repeat(",?", len(args)-1) + ")"
 
-	stmt, err := database.DatabaseClient.Client.Prepare(sql)
+	queryGamesByCompany := "SELECT * FROM games WHERE company IN (?" + strings.Repeat(",?", len(args)-1) + ")"
+	stmt, err := database.DatabaseClient.Client.Prepare(queryGamesByCompany)
 	if err != nil {
 		logger.Error("error when trying to prepare get user statment", err)
 		return nil, errors.NewInternalServerError("database error")
 	}
-	rows, err := stmt.Query(args...)
 	defer stmt.Close()
+
+	rows, err := stmt.Query(args...)
 	if err != nil {
 		logger.Error("error when getting rows from stmt", err)
 		return nil, errors.NewInternalServerError("database error")
@@ -97,21 +98,21 @@ func QueryGamesByCompany(publishers []string) ([]Game, *errors.RestErrors) {
 	return queryListOfGames, nil
 }
 
-
 func QueryGamesByPlatform(platforms []string) ([]Game, *errors.RestErrors) {
 	var args []interface{}
 
 	for _, platform := range platforms {
 		args = append(args, platform)
 	}
-	sql := "SELECT * FROM games WHERE platforms IN (?" + strings.Repeat(",?", len(args)-1) + ")"
-	stmt, err := database.DatabaseClient.Client.Prepare(sql)
+	queryGamesByPlatform := "SELECT * FROM games WHERE platforms IN (?" + strings.Repeat(",?", len(args)-1) + ")"
+	stmt, err := database.DatabaseClient.Client.Prepare(queryGamesByPlatform)
 	if err != nil {
 		logger.Error("error when trying to prepare get user statment", err)
 		return nil, errors.NewInternalServerError("database error")
 	}
-	rows, err := stmt.Query(args...)
 	defer stmt.Close()
+
+	rows, err := stmt.Query(args...)
 	if err != nil {
 		logger.Error("error when getting rows from stmt", err)
 		return nil, errors.NewInternalServerError("database error")
@@ -139,15 +140,16 @@ func QueryGamesByMetacriticScore(metacriticScore []string) ([]Game, *errors.Rest
 	for _, metaScore := range metacriticScore {
 		args = append(args, metaScore)
 	}
-	sql := 	"SELECT * FROM games WHERE metacritic IN (?" + strings.Repeat(",?", len(args)-1) + ")"
-	stmt, err := database.DatabaseClient.Client.Prepare(sql)
 
+	queryGamesByMetacriticScore := "SELECT * FROM games WHERE metacritic IN (?" + strings.Repeat(",?", len(args)-1) + ")"
+	stmt, err := database.DatabaseClient.Client.Prepare(queryGamesByMetacriticScore)
 	if err != nil {
 		logger.Error("error when trying to prepare get user statment", err)
 		return nil, errors.NewInternalServerError("database error")
 	}
-	rows, err := stmt.Query(args...)
 	defer stmt.Close()
+
+	rows, err := stmt.Query(args...)
 	if err != nil {
 		logger.Error("error when getting rows from stmt", err)
 		return nil, errors.NewInternalServerError("database error")

@@ -6,11 +6,9 @@ import (
 	"Honest-Game-Reviews/src/utils/errors"
 )
 
-
-
 var (
 	NewUsersService UsersServiceInterface = &usersService{}
-	statusActive string = "active"
+	statusActive    string                = "active"
 )
 
 type UsersServiceInterface interface {
@@ -18,7 +16,7 @@ type UsersServiceInterface interface {
 	GetUser(users.UserLoginRequest) (*users.User, *errors.RestErrors)
 }
 
-type usersService struct {}
+type usersService struct{}
 
 func (s *usersService) CreateUser(user users.User) (*users.User, *errors.RestErrors) {
 	if err := user.Validate(); err != nil {
@@ -35,8 +33,7 @@ func (s *usersService) CreateUser(user users.User) (*users.User, *errors.RestErr
 	return &user, nil
 }
 
-
-
+// route is only meant for getting a user by email once they login so we can assign a JWT once verified
 func (s *usersService) GetUser(UserLoginRequest users.UserLoginRequest) (*users.User, *errors.RestErrors) {
 	return UserLoginRequest.GetUser()
 }

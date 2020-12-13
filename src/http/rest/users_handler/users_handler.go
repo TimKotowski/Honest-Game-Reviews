@@ -8,7 +8,6 @@ import (
 	"net/http"
 )
 
-
 type UsersHandler interface {
 	CreateUser(http.ResponseWriter, *http.Request)
 	GetUser(w http.ResponseWriter, r *http.Request)
@@ -37,7 +36,7 @@ func (handler *usersHandler) CreateUser(w http.ResponseWriter, r *http.Request) 
 	json_utils.JsonResponse(w, http.StatusOK, createdUser)
 }
 
-
+// this route is only meant for getting a specificUser by email for when they login so we can use it for JWT validation
 func (handler *usersHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 	var user users.UserLoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
