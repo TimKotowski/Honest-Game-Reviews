@@ -26,3 +26,4 @@ func ClientErrorResponse(w http.ResponseWriter, statusCode int, msg string, err 
 	errMap["error"] = err
 	json.NewEncoder(w).Encode(errMap)
 }
+

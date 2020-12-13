@@ -24,10 +24,10 @@ func StartApplication() {
 	database.DatabaseClient.NewDatabase()
 
 	router := chi.NewRouter()
-	// routes
+	// api routes
 	gamesURLMapping(router)
 	usersURLMapping(router)
-	usersAuthenticationsURLMapping(router)
+	usersAuthURLMapping(router)
 
 	server := http.Server{
 		Addr:           listenAddr,
@@ -37,6 +37,7 @@ func StartApplication() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
+	// graceful shutdown
 	quit := make(chan os.Signal, 1)
 	done := make(chan bool, 1)
 

@@ -4,6 +4,8 @@ import (
 	"Honest-Game-Reviews/src/domain/users"
 	"Honest-Game-Reviews/src/utils/date_utils"
 	"Honest-Game-Reviews/src/utils/errors"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 var (
@@ -35,5 +37,18 @@ func (s *usersService) CreateUser(user users.User) (*users.User, *errors.RestErr
 
 // route is only meant for getting a user by email once they login so we can assign a JWT once verified
 func (s *usersService) GetUser(UserLoginRequest users.UserLoginRequest) (*users.User, *errors.RestErrors) {
-	return UserLoginRequest.GetUser()
+	user, err := UserLoginRequest.GetUser();
+	if err != nil {
+		return nil, err
+	}
+	userPass := []byte(UserLoginRequest.Password)
+	userFromDataBase := []byte(user.Password)
+
+	// CompareHashAndPassword compares a bcrypt hashed password from the user in the databse with its possible match when the user trying to log in
+	// if both passwords are a match we have the right user to move forward
+	passErr := bcrypt.CompareHashAndPassword(userFromDataBase, userPass)
+	if passErr != nil {
+		return nil, errors.NewBadRequestError("error when comparing passwords")
+	}
+	return user, nil
 }
