@@ -6,20 +6,23 @@ import (
 	"Honest-Game-Reviews/src/utils/json_utils"
 	"encoding/json"
 	"net/http"
+	"strconv"
+
+	"github.com/go-chi/chi"
 )
 
 type UsersHandler interface {
-	CreateUser(http.ResponseWriter, *http.Request)
-	GetUser(w http.ResponseWriter, r *http.Request)
+	CreateUserAccount(http.ResponseWriter, *http.Request)
+	GetUserByID(http.ResponseWriter, *http.Request)
 }
 
-type usersHandler struct {}
+type usersHandler struct{}
 
 func NewUsersHandler() UsersHandler {
 	return &usersHandler{}
 }
 
-func (handler *usersHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
+func (handler *usersHandler) CreateUserAccount(w http.ResponseWriter, r *http.Request) {
 	// create a user and genreate a hashed password
 	// get a body of the request
 	var user users.User
@@ -28,28 +31,27 @@ func (handler *usersHandler) CreateUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	createdUser, userErr := users_service.NewUsersService.CreateUser(user)
+	_, userErr := users_service.NewUsersService.CreateUserAccount(user)
 	if userErr != nil {
 		json_utils.JsonErrorResponse(w, userErr)
 		return
 	}
-	json_utils.JsonResponse(w, http.StatusOK, createdUser)
+
+	createdUserMessage := make(map[string]string)
+	createdUserMessage["success"] = "user created"
+	json_utils.JsonResponse(w, http.StatusOK, createdUserMessage)
 }
 
-// this route is only meant for getting a specificUser by email for when they login so we can use it for JWT validation
-func (handler *usersHandler) GetUser(w http.ResponseWriter, r *http.Request) {
-	var user users.UserLoginRequest
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		json_utils.ClientErrorResponse(w, http.StatusBadRequest, "invalid json body", err)
+func (handler *usersHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
+	userID, err := strconv.ParseInt(chi.URLParam(r, "user_id"), 10, 64)
+	if err != nil {
+		json_utils.ClientErrorResponse(w, http.StatusBadRequest, "invalid url paramter", err)
 		return
 	}
-	// get that user by email service
-	foundUser, userErr := users_service.NewUsersService.GetUser(user)
+
+	user, userErr := users_service.NewUsersService.GetUserByID(userID)
 	if userErr != nil {
 		json_utils.JsonErrorResponse(w, userErr)
-		return
 	}
-	json_utils.JsonResponse(w, http.StatusOK, foundUser)
-
+	json_utils.JsonResponse(w, http.StatusOK, user)
 }
-

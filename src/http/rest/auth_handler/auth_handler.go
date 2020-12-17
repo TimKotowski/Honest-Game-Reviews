@@ -20,22 +20,23 @@ func NewAuthHandler() AuthHandlerInterface {
 }
 
 func (handler *authHandler) UserLogin(w http.ResponseWriter, r *http.Request) {
-	var user users.UserLoginRequest
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+	var userCredentials users.UserLoginRequest
+	if err := json.NewDecoder(r.Body).Decode(&userCredentials); err != nil {
 		json_utils.ClientErrorResponse(w, http.StatusBadRequest, "invalid json body", err)
 		return
 	}
+
 	// get that specific user once they login
-	specificUser, userErr := users_service.NewUsersService.GetUser(user)
+	user, userErr := users_service.NewUsersService.UserLogin(userCredentials)
 	if userErr != nil {
 		json_utils.JsonErrorResponse(w, userErr)
 		return
 	}
 	// once we get more of the users info from the database, call the service and get the signedToken
-	jwtData, jwtErr := tokens_service.TokensService.CreateToken(specificUser.Password, specificUser.ID)
+	signedToken, jwtErr := tokens_service.TokensService.CreateToken(user.Password, user.ID)
 	if jwtErr != nil {
-		json_utils.ClientErrorResponse(w, http.StatusBadRequest, "invalid json body", jwtErr)
+		json_utils.JsonErrorResponse(w, jwtErr)
 		return
 	}
-	json_utils.JsonResponse(w, http.StatusOK, jwtData)
+	json_utils.JsonResponse(w, http.StatusOK, signedToken)
 }

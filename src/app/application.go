@@ -27,7 +27,7 @@ func StartApplication() {
 	// api routes
 	gamesURLMapping(router)
 	usersURLMapping(router)
-	usersAuthURLMapping(router)
+	authURLMapping(router)
 
 	server := http.Server{
 		Addr:           listenAddr,

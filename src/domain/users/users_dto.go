@@ -50,3 +50,20 @@ func (user *User) Validate() *errors.RestErrors {
 	}
 	return nil
 }
+
+func (user *UserLoginRequest) LoginRequestValidation() *errors.RestErrors {
+	// remove white space
+	user.Username = strings.TrimSpace(strings.ToLower(user.Username))
+	user.Email = strings.TrimSpace(strings.ToLower(user.Email))
+
+	if user.Username == "" {
+		return errors.NewBadRequestError("username empty please enter an username")
+	}
+	if user.Email == "" {
+		return errors.NewBadRequestError("email is empty please enter an email")
+	}
+	if user.Password == "" {
+		return errors.NewNotFoundError("password is empty, please enter a password")
+	}
+	return nil
+}

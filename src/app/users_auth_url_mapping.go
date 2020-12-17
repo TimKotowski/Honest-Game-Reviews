@@ -6,6 +6,6 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func usersAuthURLMapping(router *chi.Mux) {
+func authURLMapping(router *chi.Mux) {
 	router.Post("/api/v1/login", auth_handler.NewAuthHandler().UserLogin)
 }

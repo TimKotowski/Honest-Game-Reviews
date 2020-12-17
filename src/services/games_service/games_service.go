@@ -3,10 +3,8 @@ package games_service
 import (
 	"Honest-Game-Reviews/src/domain/games"
 	"Honest-Game-Reviews/src/utils/errors"
-	"fmt"
 	"strings"
 )
-
 
 type GameServiceInterface interface {
 	GetGame(int64) (*games.Game, *errors.RestErrors)
@@ -22,7 +20,6 @@ type gamesService struct{}
 func NewGameService() GameServiceInterface {
 	return &gamesService{}
 }
-
 
 func (s *gamesService) GetGame(gameID int64) (*games.Game, *errors.RestErrors) {
 	game := &games.Game{ID: gameID}
@@ -45,20 +42,18 @@ func (s *gamesService) QueryGamesByCompany(publishers []string) (games.Games, *e
 	return games.QueryGamesByCompany(publishers)
 }
 
-
 func (s *gamesService) QueryGamesByPlatform(platforms []string) (games.Games, *errors.RestErrors) {
 	for _, platform := range platforms {
 		if strings.Contains(platform, "Reset List") {
-			fmt.Println("hitting")
 			return games.GetAllGames()
 		}
 	}
 	return games.QueryGamesByPlatform(platforms)
 }
 
-func (s *gamesService) QueryGamesByMetacriticScore(metacriticScore []string) (games.Games, *errors.RestErrors)  {
+func (s *gamesService) QueryGamesByMetacriticScore(metacriticScore []string) (games.Games, *errors.RestErrors) {
 	for _, score := range metacriticScore {
-		if strings.Contains(score,"Reset List") {
+		if strings.Contains(score, "Reset List") {
 			return games.GetAllGames()
 		}
 	}

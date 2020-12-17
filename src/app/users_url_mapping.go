@@ -7,6 +7,6 @@ import (
 )
 
 func usersURLMapping(router *chi.Mux) {
-	router.Post("/api/v1/create", users_handler.NewUsersHandler().CreateUser)
-	router.Post("/api/v1/user", users_handler.NewUsersHandler().GetUser)
+	router.Post("/api/v1/create", users_handler.NewUsersHandler().CreateUserAccount)
+	router.Get("/api/v1/user/{user_id}", users_handler.NewUsersHandler().GetUserByID)
 }
