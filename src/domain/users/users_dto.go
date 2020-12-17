@@ -18,6 +18,8 @@ type User struct {
 	Status      string `json:"status"`
 }
 
+type Users []User
+
 type UserLoginRequest struct {
 	Username string `json:"user_name"`
 	Email    string `json:"email"`
